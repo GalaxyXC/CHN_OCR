@@ -1,9 +1,19 @@
 import os
 import argparse
 import pickle
+from PIL import Image, ImageDraw, ImageFont
+
 
 DATA_DIR = "data_synthesis/"
 GB2312_FILE = "GB2312-UTF8_2.txt"
+
+HEIGHT = 100
+WIDTH = 100
+MARGIN = 4
+
+FONT0 = 'msyh.ttc'
+FONT = 'fonts/'
+
 
 def args_parse():
     """
@@ -49,17 +59,16 @@ def args_parse():
     args = vars(parser.parse_args())
     return args
 
-def map_id_char():
+def map_id_char(char_path, map_backup = ""):
     # read all chars in GB2312 txt file into memory
     all_char = ""
-    with open(file=DATA_DIR + GB2312_FILE, mode='r', encoding='utf-8') as f:
+    with open(file=char_path, mode='r', encoding='utf-8') as f:
         for line in f:
             all_char += line
 
     discard_chars = "ABCDEFo\n0123456789abcdef+ "
     all_char = [e for e in all_char if e not in discard_chars][1:]
     # print(len(all_char)) # 3755
-
     all_char += "1234567890"
     all_char += "".join([chr(ord('a') + i) for i in range(26)])
     all_char += "".join([chr(ord('A') + i) for i in range(26)])
@@ -71,18 +80,62 @@ def map_id_char():
         key = str(idx+1).zfill(4)
         val = all_char[idx]#.encode('utf-8')
         mapping_idx_to_char[key] = val
-        mapping_char_to_idx[val] = key
-
-    with open(DATA_DIR + "mapping_idx_to_char.pkl", 'wb') as f:
-        pickle.dump(mapping_idx_to_char, f)
-
-    with open(DATA_DIR + "mapping_char_to_idx.pkl", 'wb') as f:
-        pickle.dump(mapping_char_to_idx, f)
+        #mapping_char_to_idx[val] = key
+    if map_backup:
+        with open(map_backup + ".pkl", 'wb') as f:
+            pickle.dump(mapping_idx_to_char, f)
 
     """
     # retrieve mappings
         with open(DATA_DIR + "mapping_idx_to_char.pkl", 'rb') as f:
         tmp = pickle.load(f)
+    
+    # reverse dictionary
+        pickle_map_char_to_idx =  "mapping_char_to_idx.pkl" 
+        with open(char_path, 'wb') as f:
+            pickle.dump(mapping_char_to_idx, f)
     """
+    # output the name of stored pickles
+    return mapping_idx_to_char
 
-def
+map_idx_to_char = map_id_char(DATA_DIR + GB2312_FILE, "mapping_idx_to_char")
+
+def font_to_img():
+    pass
+
+"""
+def gen_img(font, map_idx2char):
+    for char, value in map_idx2char.items():  # 外层循环是字
+        image_list = []
+        print(char, value)
+        # char_dir = os.path.join(images_dir, "%0.5d" % value)
+        for j, verified_font_path in enumerate(verified_font_paths):  # 内层循环是字体
+            if rotate == 0:
+                image = font2image.do(verified_font_path, char)
+                image_list.append(image)
+            else:
+                for k in all_rotate_angles:
+                    image = font2image.do(verified_font_path, char, rotate=k)
+                    image_list.append(image)
+"""
+
+def char2img(idx, char, font, output_path):
+    # create folder
+    if not os.path.exists(idx):
+        os.makedirs(idx)
+    # generate plain image
+    # black background
+    img = Image.new("RGB", (WIDTH, HEIGHT), "black")
+    draw = ImageDraw.Draw(img)
+    font = ImageFont.truetype(font, int(WIDTH * 0.7), )
+    # white char.
+    draw.text((0, 0), char, (255, 255, 255), font=font)
+
+
+
+    # data augmentation:
+    #   gen. rotate image (-15, -10, 5, 0, 5, 10, 15)
+    #   gen. image pepper-salt noise
+    #   image erosion
+    #   image dilation
+
