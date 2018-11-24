@@ -1,18 +1,65 @@
 import os
-import argparse
+import copy
 import pickle
+import argparse
+import cv2
+
 from PIL import Image, ImageDraw, ImageFont
+import numpy as np
+
+# Set ROOT_DIR to "data_synthesis/" when run in PyCharm's Console, Set to "" otherwise
+ROOT_DIR = "data_synthesis/"
+FONT_DIR = 'fonts/'
+OUTPUT_DIR = 'data/'
 
 
-DATA_DIR = "data_synthesis/"
+
 GB2312_FILE = "GB2312-UTF8_2.txt"
+
+
+
 
 HEIGHT = 100
 WIDTH = 100
 MARGIN = 4
 
 FONT0 = 'msyh.ttc'
-FONT = 'fonts/'
+
+# Find minimum bounding box
+class FindImageBBox(object):
+    def __init__(self, ):
+        pass
+
+    def do(self, img):
+        height = img.shape[0]
+        width = img.shape[1]
+        v_sum = np.sum(img, axis=0)
+        h_sum = np.sum(img, axis=1)
+        left = 0
+        right = width - 1
+        top = 0
+        low = height - 1
+        # Scan left to right
+        for i in range(width):
+            if v_sum[i] > 0:
+                left = i
+                break
+        # Scan right to left
+        for i in range(width - 1, -1, -1):
+            if v_sum[i] > 0:
+                right = i
+                break
+        # Scan top-down
+        for i in range(height):
+            if h_sum[i] > 0:
+                top = i
+                break
+        # Scan bottom-up
+        for i in range(height - 1, -1, -1):
+            if h_sum[i] > 0:
+                low = i
+                break
+        return (left, top, right, low)
 
 
 def args_parse():
@@ -98,10 +145,12 @@ def map_id_char(char_path, map_backup = ""):
     # output the name of stored pickles
     return mapping_idx_to_char
 
-map_idx_to_char = map_id_char(DATA_DIR + GB2312_FILE, "mapping_idx_to_char")
+
+map_idx_to_char = map_id_char(ROOT_DIR + GB2312_FILE, "mapping_idx_to_char")
 
 def font_to_img():
     pass
+
 
 """
 def gen_img(font, map_idx2char):
@@ -121,8 +170,18 @@ def gen_img(font, map_idx2char):
 
 def char2img(idx, char, font, output_path):
     # create folder
-    if not os.path.exists(idx):
-        os.makedirs(idx)
+    train_dir = ROOT_DIR + OUTPUT_DIR + 'train/' + idx
+    validate_dir = ROOT_DIR + OUTPUT_DIR + 'validate/' + idx
+    test_dir = ROOT_DIR + OUTPUT_DIR + 'test/' + idx
+
+    if not os.path.exists(train_dir):
+        os.makedirs(train_dir)
+    if not os.path.exists(validate_dir):
+        os.makedirs(validate_dir)
+    if not os.path.exists(test_dir):
+        os.makedirs(test_dir)
+
+    image_list = []
     # generate plain image
     # black background
     img = Image.new("RGB", (WIDTH, HEIGHT), "black")
@@ -130,12 +189,31 @@ def char2img(idx, char, font, output_path):
     font = ImageFont.truetype(font, int(WIDTH * 0.7), )
     # white char.
     draw.text((0, 0), char, (255, 255, 255), font=font)
-
-
+    image_list.append(copy.deepcopy(img))
 
     # data augmentation:
     #   gen. rotate image (-15, -10, 5, 0, 5, 10, 15)
+    for angle in [-15, -10, -5, 5, 10, 15]:
+        img_rotate = img.rotate(angle)
+        image_list.append(img_rotate)
+
+    # retrieve 3-channel matrix of image
+    img_data = list(img.getdata())
+    sum_val = 0
+    for i in img_data:
+        sum_val += sum(i)
+    if sum_val > 2:
+        find_image_bbox = FindImageBBox()
+        np_img = np.asarray(img_data, dtype='uint8')
+        np_img = np_img[:, 0]
+        np_img = np_img.reshape((HEIGHT, WIDTH))
+        cropped_box = find_image_bbox.do(np_img)
+        left, upper, right, lower = cropped_box
+        np_img = np_img[upper: lower + 1, left: right + 1]
+
     #   gen. image pepper-salt noise
+
     #   image erosion
     #   image dilation
 
+    return image_list
