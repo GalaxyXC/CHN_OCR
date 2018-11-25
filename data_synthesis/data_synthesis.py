@@ -4,12 +4,14 @@ import pickle
 import argparse
 import cv2
 import random
+import time
 
 from PIL import Image, ImageDraw, ImageFont
 import numpy as np
 
 # Set ROOT_DIR to "data_synthesis/" when run in PyCharm's Console, Set to "" otherwise
 ROOT_DIR = "data_synthesis/"
+ROOT_DIR = ""
 FONT_DIR = 'fonts/'
 OUTPUT_DIR = 'data/'
 
@@ -219,44 +221,6 @@ def args_parse():
     return args
 
 
-def map_id_char(char_file_path, map_backup_name =""):
-    # read all chars in GB2312 txt file into memory
-    all_char = ""
-    with open(file=char_file_path, mode='r', encoding='utf-8') as f:
-        for line in f:
-            all_char += line
-
-    discard_chars = "ABCDEFo\n0123456789abcdef+ "
-    all_char = [e for e in all_char if e not in discard_chars][1:]
-    # print(len(all_char)) # 3755
-    all_char += "1234567890"
-    all_char += "".join([chr(ord('a') + i) for i in range(26)])
-    all_char += "".join([chr(ord('A') + i) for i in range(26)])
-
-    # create dictionary dict[id]=char
-    mapping_idx_to_char = {}
-    #mapping_char_to_idx = {}
-    for idx in range(len(all_char)):
-        key = str(idx+1).zfill(4)
-        val = all_char[idx]#.encode('utf-8')
-        mapping_idx_to_char[key] = val
-        #mapping_char_to_idx[val] = key
-    if map_backup_name:
-        with open(map_backup_name + ".pkl", 'wb') as f:
-            pickle.dump(mapping_idx_to_char, f)
-
-    """
-    # retrieve mappings
-        with open(DATA_DIR + "mapping_idx_to_char.pkl", 'rb') as f:
-        tmp = pickle.load(f)
-    
-    # reverse dictionary
-        pickle_map_char_to_idx =  "mapping_char_to_idx.pkl" 
-        with open(char_path, 'wb') as f:
-            pickle.dump(mapping_char_to_idx, f)
-    """
-    # output the name of stored pickles
-    return mapping_idx_to_char
 
 
 def font_to_img():
@@ -282,11 +246,50 @@ class Augmentor(object):
         return cv2.dilate(img, kernel)
 
 
-class Generator(object):
+class DataGenerator(object):
     def __init__(self):
         pass
 
-    def char2img(idx, char, font):
+    def map_id_char(self, char_file_path, map_backup_name=""):
+        # read all chars in GB2312 txt file into memory
+        all_char = ""
+        with open(file=char_file_path, mode='r', encoding='utf-8') as f:
+            for line in f:
+                all_char += line
+
+        discard_chars = "ABCDEFo\n0123456789abcdef+ "
+        all_char = [e for e in all_char if e not in discard_chars][1:]
+        # print(len(all_char)) # 3755
+        all_char += "1234567890"
+        all_char += "".join([chr(ord('a') + i) for i in range(26)])
+        all_char += "".join([chr(ord('A') + i) for i in range(26)])
+
+        # create dictionary dict[id]=char
+        mapping_idx_to_char = {}
+        # mapping_char_to_idx = {}
+        for idx in range(len(all_char)):
+            key = str(idx + 1).zfill(4)
+            val = all_char[idx]  # .encode('utf-8')
+            mapping_idx_to_char[key] = val
+            # mapping_char_to_idx[val] = key
+        if map_backup_name:
+            with open(map_backup_name + ".pkl", 'wb') as f:
+                pickle.dump(mapping_idx_to_char, f)
+
+        """
+        # retrieve mappings
+            with open(DATA_DIR + "mapping_idx_to_char.pkl", 'rb') as f:
+            tmp = pickle.load(f)
+
+        # reverse dictionary
+            pickle_map_char_to_idx =  "mapping_char_to_idx.pkl" 
+            with open(char_path, 'wb') as f:
+                pickle.dump(mapping_char_to_idx, f)
+        """
+        # output the name of stored pickles
+        return mapping_idx_to_char
+
+    def char2img(self, idx, char, font):
         image_list = []
         # generate plain image
         # black background
@@ -356,7 +359,9 @@ class Generator(object):
         # cv2.destroyAllWindows()
         return np_img_list + noised + eroded + dilated
 
-    def split_test_train_write(self, data, train=70, validate=20, test=10, random_seed = 670):
+    def split_test_train_write(self, data, idx, font_name,
+                               train=70, validate=20, test=10,
+                               random_seed=670):
         # create folder names
         train_dir = ROOT_DIR + OUTPUT_DIR + 'train/' + idx
         validate_dir = ROOT_DIR + OUTPUT_DIR + 'validate/' + idx
@@ -369,38 +374,64 @@ class Generator(object):
 
         train_count = train / (train+validate+test) * size
         validate_count = validate / (train+validate+test) * size
+        split = [[],[],[]]
         count = 0
         while indices:
+            i = indices.pop()
             if count < train_count:
-                
+                split[0].append(i)
+            elif train_count <= count < (train_count+validate_count):
+                split[1].append(i)
+            else:
+                split[2].append(i)
             count += 1
-
-
 
 
         if not os.path.exists(train_dir):
             os.makedirs(train_dir)
+        for i in split[0]:
+            cv2.imwrite(train_dir + "/" + font_name + str(i) + ".png", data[i])
+
         if not os.path.exists(validate_dir):
             os.makedirs(validate_dir)
+        for i in split[1]:
+            cv2.imwrite(validate_dir + "/" + font_name + str(i) + ".png", data[i])
+
         if not os.path.exists(test_dir):
             os.makedirs(test_dir)
+        for i in split[2]:
+            cv2.imwrite(test_dir + "/" + font_name + str(i) + ".png", data[i])
 
+    def gen_img(self, fonts, map_idx2char, max_iter=-1):
+        if max_iter<0:
+            max_iter = len(map_idx2char)
 
+        iteration = 0
+        for idx, char in map_idx2char.items():
+            print(idx, char)
+            image_list = []
+            for font in fonts:
+                image_list = self.char2img(idx, char, font)
+                self.split_test_train_write(image_list, idx,
+                                            font_name=font.split(".")[0])
 
-def gen_img(fonts, map_idx2char):
-    for idx, char in map_idx2char.items():
-        print(idx, char)
-        image_list = []
-        gen = Generator()
-        for font in fonts:
-            image_list = gen.char2img(idx, char, font)
-            gen.split_test_train_write(image_list)
-
-
-
+            iteration += 1
+            if iteration >= max_iter:
+                break
 
 if __name__ == '__main__':
-    font = FONT0
-    idx = '0001'
-    map_idx_to_char = map_id_char(ROOT_DIR + GB2312_FILE, "mapping_idx_to_char")
-    char = map_idx_to_char[idx]
+    # Generating Chinese character
+    tick = time.time()
+
+    gen = DataGenerator()
+    map_idx_to_char = gen.map_id_char(ROOT_DIR + GB2312_FILE, "mapping_idx_to_char")
+    # 微软雅黑 /  简明黑体 / 微软仿宋 / 简明楷体
+    fonts = ["msyh.ttc", "simhei.ttf", "simfang.ttf", "simkai.ttf"]
+    gen.gen_img(fonts, map_idx_to_char, max_iter=3)
+
+    print(time.time()-tick)
+
+    # # TESTING
+    # font = FONT0
+    # idx = '0001'
+    # char = map_idx_to_char[idx]
