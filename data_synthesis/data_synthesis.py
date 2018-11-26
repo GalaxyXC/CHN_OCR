@@ -221,11 +221,6 @@ def args_parse():
     return args
 
 
-
-
-def font_to_img():
-    pass
-
 class Augmentor(object):
     def __init__(self):
         pass
@@ -425,9 +420,9 @@ if __name__ == '__main__':
 
     gen = DataGenerator()
     map_idx_to_char = gen.map_id_char(ROOT_DIR + GB2312_FILE, "mapping_idx_to_char")
-    # 微软雅黑 /  简明黑体 / 微软仿宋 / 简明楷体
-    fonts = ["msyh.ttc", "simhei.ttf", "simfang.ttf", "simkai.ttf"]
-    gen.gen_img(fonts, map_idx_to_char, max_iter=3)
+    # 微软雅黑 /  黑体 / 仿宋 / 楷体 / 宋体
+    fonts = ["msyh.ttc", "simhei.ttf", "simfang.ttf", "simkai.ttf", "simsun.ttc"]
+    gen.gen_img(fonts, map_idx_to_char, max_iter=-1)
 
     print(time.time()-tick)
 

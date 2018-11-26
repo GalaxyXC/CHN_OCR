@@ -2,9 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="66c80fdd-9dbd-4e44-86b9-2b359516554a" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/OCR1char/ocr1char.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data_synthesis/data_synthesis.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_synthesis/data_synthesis.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data_synthesis/temp.py" beforeDir="false" afterPath="$PROJECT_DIR$/temp.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -14,19 +16,38 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/data_synthesis/data_synthesis.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="313">
-              <caret line="209" column="58" lean-forward="true" selection-start-line="202" selection-start-column="8" selection-end-line="209" selection-end-column="58" />
+            <state relative-caret-position="795">
+              <caret line="424" column="52" lean-forward="true" selection-start-line="424" selection-start-column="52" selection-end-line="424" selection-end-column="52" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
-                <element signature="e#444#1316#0" />
-                <element signature="e#1341#3461#0" />
-                <marker date="1543043466336" expanded="true" signature="3555:3556" ph="..." />
-                <marker date="1543043466336" expanded="true" signature="5516:5517" ph="..." />
-                <marker date="1543043466336" expanded="true" signature="5560:5565" ph="..." />
-                <marker date="1543043466336" expanded="true" signature="5982:5987" ph="..." />
+                <marker date="1543123702778" expanded="true" signature="9985:9994" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/temp.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1360">
+              <caret line="183" column="56" selection-start-line="183" selection-start-column="52" selection-end-line="183" selection-end-column="56" />
+              <folding>
+                <element signature="e#2947#3309#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/OCR1char/ocr1char.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="75">
+              <caret line="32" column="36" lean-forward="true" selection-start-line="32" selection-start-column="36" selection-end-line="32" selection-end-column="36" />
+              <folding>
+                <element signature="e#0#6#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -41,13 +62,22 @@
       </list>
     </option>
   </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>KeepRatio</find>
+      <find>input_pipeline</find>
+    </findStrings>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
+        <option value="$PROJECT_DIR$/data_synthesis/temp.py" />
         <option value="$PROJECT_DIR$/data_synthesis/data_synthesis.py" />
+        <option value="$PROJECT_DIR$/temp.py" />
+        <option value="$PROJECT_DIR$/OCR1char/ocr1char.py" />
       </list>
     </option>
   </component>
@@ -64,6 +94,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -76,15 +107,30 @@
               <item name="CHN_OCR" type="462c0819:PsiDirectoryNode" />
               <item name="data_synthesis" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="CHN_OCR" type="b2602c69:ProjectViewProjectNode" />
+              <item name="CHN_OCR" type="462c0819:PsiDirectoryNode" />
+              <item name="data_synthesis" type="462c0819:PsiDirectoryNode" />
+              <item name="data" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="CHN_OCR" type="b2602c69:ProjectViewProjectNode" />
+              <item name="CHN_OCR" type="462c0819:PsiDirectoryNode" />
+              <item name="OCR1char" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\workspace\CHN_OCR" />
+    </key>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -141,21 +187,22 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24960506" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1421801" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" sideWeight="0.4997367" weight="0.32972974" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.32972974" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.5460769" weight="0.18142548" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.32972974" />
       <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.5650342" weight="0.32937366" />
-      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.43496576" side_tool="true" weight="0.32972974" />
-      <window_info active="true" anchor="bottom" id="Python Console" order="10" sideWeight="0.6155872" visible="true" weight="0.33585313" />
+      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.41495523" side_tool="true" visible="true" weight="0.33585313" />
+      <window_info active="true" anchor="bottom" id="Python Console" order="10" sideWeight="0.58504474" visible="true" weight="0.33585313" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -165,18 +212,33 @@
     <entry file="file://$PROJECT_DIR$/venv/pyvenv.cfg">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
+    <entry file="file://$PROJECT_DIR$/temp.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1360">
+          <caret line="183" column="56" selection-start-line="183" selection-start-column="52" selection-end-line="183" selection-end-column="56" />
+          <folding>
+            <element signature="e#2947#3309#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/data_synthesis/data_synthesis.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="313">
-          <caret line="209" column="58" lean-forward="true" selection-start-line="202" selection-start-column="8" selection-end-line="209" selection-end-column="58" />
+        <state relative-caret-position="795">
+          <caret line="424" column="52" lean-forward="true" selection-start-line="424" selection-start-column="52" selection-end-line="424" selection-end-column="52" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
-            <element signature="e#444#1316#0" />
-            <element signature="e#1341#3461#0" />
-            <marker date="1543043466336" expanded="true" signature="3555:3556" ph="..." />
-            <marker date="1543043466336" expanded="true" signature="5516:5517" ph="..." />
-            <marker date="1543043466336" expanded="true" signature="5560:5565" ph="..." />
-            <marker date="1543043466336" expanded="true" signature="5982:5987" ph="..." />
+            <marker date="1543123702778" expanded="true" signature="9985:9994" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/OCR1char/ocr1char.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="32" column="36" lean-forward="true" selection-start-line="32" selection-start-column="36" selection-end-line="32" selection-end-column="36" />
+          <folding>
+            <element signature="e#0#6#0" expanded="true" />
           </folding>
         </state>
       </provider>
