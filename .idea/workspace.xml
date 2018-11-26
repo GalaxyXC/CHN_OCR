@@ -2,11 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="66c80fdd-9dbd-4e44-86b9-2b359516554a" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/OCR1char/ocr1char.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/NotesOfModels.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/OCR1char/OCR1charTrainer.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data_synthesis/data_synthesis.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_synthesis/data_synthesis.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data_synthesis/temp.py" beforeDir="false" afterPath="$PROJECT_DIR$/temp.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/OCR1char/ocr1char.py" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -19,8 +19,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/data_synthesis/data_synthesis.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="795">
-              <caret line="424" column="52" lean-forward="true" selection-start-line="424" selection-start-column="52" selection-end-line="424" selection-end-column="52" />
+            <state relative-caret-position="268">
+              <caret line="270" selection-start-line="270" selection-end-line="271" selection-end-column="51" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
                 <marker date="1543123702778" expanded="true" signature="9985:9994" ph="..." />
@@ -32,7 +32,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/temp.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1360">
+            <state relative-caret-position="2176">
               <caret line="183" column="56" selection-start-line="183" selection-start-column="52" selection-end-line="183" selection-end-column="56" />
               <folding>
                 <element signature="e#2947#3309#0" />
@@ -42,12 +42,21 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/OCR1char/ocr1char.py">
+        <entry file="file://$PROJECT_DIR$/NotesOfModels.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="75">
-              <caret line="32" column="36" lean-forward="true" selection-start-line="32" selection-start-column="36" selection-end-line="32" selection-end-column="36" />
+            <state relative-caret-position="34">
+              <caret line="2" column="164" selection-start-line="2" selection-start-column="164" selection-end-line="2" selection-end-column="164" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/OCR1char/OCR1charTrainer.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="2183">
+              <caret line="143" column="35" selection-start-line="143" selection-start-column="35" selection-end-line="143" selection-end-column="35" />
               <folding>
-                <element signature="e#0#6#0" expanded="true" />
+                <element signature="e#0#9#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -66,7 +75,12 @@
     <findStrings>
       <find>KeepRatio</find>
       <find>input_pipeline</find>
+      <find>TRAIN_</find>
     </findStrings>
+    <replaceStrings>
+      <replace>_validate</replace>
+      <replace>VALIDATE_</replace>
+    </replaceStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -78,6 +92,9 @@
         <option value="$PROJECT_DIR$/data_synthesis/data_synthesis.py" />
         <option value="$PROJECT_DIR$/temp.py" />
         <option value="$PROJECT_DIR$/OCR1char/ocr1char.py" />
+        <option value="$PROJECT_DIR$/.gitignore" />
+        <option value="$PROJECT_DIR$/OCR1char/OCR1charTrainer.py" />
+        <option value="$PROJECT_DIR$/NotesOfModels.py" />
       </list>
     </option>
   </component>
@@ -106,12 +123,6 @@
               <item name="CHN_OCR" type="b2602c69:ProjectViewProjectNode" />
               <item name="CHN_OCR" type="462c0819:PsiDirectoryNode" />
               <item name="data_synthesis" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="CHN_OCR" type="b2602c69:ProjectViewProjectNode" />
-              <item name="CHN_OCR" type="462c0819:PsiDirectoryNode" />
-              <item name="data_synthesis" type="462c0819:PsiDirectoryNode" />
-              <item name="data" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="CHN_OCR" type="b2602c69:ProjectViewProjectNode" />
@@ -189,7 +200,7 @@
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1421801" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.1421801" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -201,8 +212,8 @@
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.32972974" />
       <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.5650342" weight="0.32937366" />
-      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.41495523" side_tool="true" visible="true" weight="0.33585313" />
-      <window_info active="true" anchor="bottom" id="Python Console" order="10" sideWeight="0.58504474" visible="true" weight="0.33585313" />
+      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.41495523" side_tool="true" weight="0.33585313" />
+      <window_info anchor="bottom" id="Python Console" order="10" sideWeight="0.58504474" visible="true" weight="0.33585313" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -212,20 +223,10 @@
     <entry file="file://$PROJECT_DIR$/venv/pyvenv.cfg">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/temp.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1360">
-          <caret line="183" column="56" selection-start-line="183" selection-start-column="52" selection-end-line="183" selection-end-column="56" />
-          <folding>
-            <element signature="e#2947#3309#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/data_synthesis/data_synthesis.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="795">
-          <caret line="424" column="52" lean-forward="true" selection-start-line="424" selection-start-column="52" selection-end-line="424" selection-end-column="52" />
+        <state relative-caret-position="268">
+          <caret line="270" selection-start-line="270" selection-end-line="271" selection-end-column="51" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
             <marker date="1543123702778" expanded="true" signature="9985:9994" ph="..." />
@@ -233,13 +234,37 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/OCR1char/ocr1char.py">
+    <entry file="file://$PROJECT_DIR$/temp.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="32" column="36" lean-forward="true" selection-start-line="32" selection-start-column="36" selection-end-line="32" selection-end-column="36" />
+        <state relative-caret-position="2176">
+          <caret line="183" column="56" selection-start-line="183" selection-start-column="52" selection-end-line="183" selection-end-column="56" />
           <folding>
-            <element signature="e#0#6#0" expanded="true" />
+            <element signature="e#2947#3309#0" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="16" selection-start-line="4" selection-start-column="16" selection-end-line="4" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/OCR1char/OCR1charTrainer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2183">
+          <caret line="143" column="35" selection-start-line="143" selection-start-column="35" selection-end-line="143" selection-end-column="35" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/NotesOfModels.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" column="164" selection-start-line="2" selection-start-column="164" selection-end-line="2" selection-end-column="164" />
         </state>
       </provider>
     </entry>
