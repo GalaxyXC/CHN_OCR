@@ -2,13 +2,12 @@ import os
 import time
 import pickle
 
-# import pandas as pd
 import numpy as np
 import tensorflow as tf
+from keras import backend as K
 from keras import Sequential
-from keras.layers import LSTM, Dense, Dropout, Activation, Conv2D, Flatten, MaxPool2D
+from keras.layers import Dense, Dropout, Activation, Conv2D, Flatten, MaxPool2D
 from keras.optimizers import Adam
-import cv2
 
 ROOT_DIR = "D:/workspace/CHN_OCR/data_synthesis/"
 DATA_DIR = "data/"
@@ -86,28 +85,22 @@ class OCR1charTrainer(object):
         with open("validating_file_names.pkl", 'rb') as f:
             X_validate, y_validate = pickle.load(f)
 
-        training_set = self.tfdata_generator(X_train, y_train, train=True)
-        print("training_set pipeline generated.")
-        validating_set = self.tfdata_generator(X_validate, y_validate, train=False)
-        print("validating_set pipeline generated.")
-
-        # initialize iterators
-        train_itr = training_set.make_one_shot_iterator()
-        valid_itr = validating_set.make_one_shot_iterator()
-        xtr, ytr = train_itr.get_next()
-        print(xtr)
-        print(ytr)
-        xvd, yvd = valid_itr.get_next()
-
-
         model = keras_model
         model.compile(loss='sparse_categorical_crossentropy',
                       optimizer='adam',
                       metrics=['accuracy'])
+
+        tik = time.time()
+        """
         model.fit(xtr, ytr,
                   steps_per_epoch=len(X_train) // BATCH_SIZE,
                   epochs=epochs,
                   batch_size=batch_size)
+        """
+        model.fit_generator(generator=self.tfdata_generator(X_train, y_train, train=True),
+                            steps_per_epoch=len(X_train) // batch_size,
+                            workers=0)
+        print(time.time() - tik)
 
         # score = model.evaluate(validating_set.make_one_shot_iterator(), batch_size=batch_size*2)
         return
@@ -120,24 +113,15 @@ class OCR1charTrainer(object):
         :param labels: tf.int32,
         :param train: Boolean, True = training data, False = Validating/testing data
         :param batch_size: int, default
-        :return: tf.Dataset, a pipeline
+        :return: tf.Dataset generator for pipeline
         """
 
         # Construct a data generator using tf.Dataset
         def preprocess(image, label):
             # Preprocess raw data into trainable input.
-            """
-            images_array_list = [cv2.imread(f)[:,:,0] for f in image]
-            imgs = tf.stack(images_array_list) # Tensor: 1000 x 100 x 100 x 3
-            x = tf.reshape(tf.cast(imgs, tf.float32), (100, 100, 1))
-            """
-            #print(type(image), image, type(label), label)
-            image_string = tf.read_file(image)
-            # Don't use tf.image.decode_image, or the output shape will be undefined
-            image_array = tf.image.decode_png(image_string, channels=1)
-            # This will convert to float values in [0, 1]
+            image_array = tf.image.decode_png(tf.read_file(image), channels=1)
+            # Convert to float values in [0, 1]
             img = tf.image.convert_image_dtype(image_array, tf.float32)
-            #img = cv2.imread(image)[:,:,0]
             x = tf.reshape(img, (100, 100, 1))
             y = tf.one_hot(tf.convert_to_tensor(label), depth=NUM_CLASSES)
             return x, y
@@ -145,20 +129,15 @@ class OCR1charTrainer(object):
         dataset = tf.data.Dataset.from_tensor_slices((images, labels))
         if train:
             dataset = dataset.shuffle(len(images))  # depends on sample size
-
-        # Transform and batch data at the same time
-        """
-        # dataset = dataset.apply(tf.data.experimental.map_and_batch(
-        dataset = dataset.apply(tf.contrib.data.map_and_batch(  # Deprecated
-            preprocess, batch_size,
-            num_parallel_batches=2,  # cpu cores
-            drop_remainder=True if train else False))
-        """
-        dataset = dataset.map(preprocess, num_parallel_calls=4)
-        dataset = dataset.batch(batch_size)
-        dataset = dataset.repeat()
+        dataset = dataset.map(preprocess, num_parallel_calls=4).batch(batch_size).repeat()
         dataset = dataset.prefetch(tf.contrib.data.AUTOTUNE)
-        return dataset
+
+        iterator = dataset.make_one_shot_iterator()
+
+        next_batch = iterator.get_next()
+        while True:
+            yield K.get_session().run(next_batch)
+        #return dataset
 
     def model2_setup(self):
         # LeNet, CNN by Yan LeCun
@@ -181,13 +160,13 @@ class OCR1charTrainer(object):
         return model
 
     def model1_setup(self):
-        # Simple DNN
+        # Simple NN
         model = Sequential()
-        model.add(Conv2D(32, kernel_size=(3, 3), activation='relu'))
+        model.add(Conv2D(32, kernel_size=(3, 3), activation='relu', input_shape=(100, 100, 1)))
         model.add(MaxPool2D(pool_size=(2, 2)))
         #model.add(Conv2D(64, kernel_size=(3, 3), activation='relu'))
         #model.add(MaxPool2D(pool_size=(2, 2)))
-        model.add(Dense(128, activation='relu'))
+        model.add(Dense(64, activation='relu'))
         model.add(Flatten())
         model.add(Dropout(0.1))
         model.add(Dense(NUM_CLASSES, activation='softmax'))
@@ -196,18 +175,19 @@ class OCR1charTrainer(object):
 if __name__ == '__main__':
     tn = OCR1charTrainer()
     model1 = tn.model1_setup() # simple DNN
+
+    print("model set.")
     tn.train(model1, epochs=5)
 
 
     """
-    # DISPLAYING cv2.IMAGE
-    cv2.namedWindow('image', cv2.WINDOW_NORMAL)
-    cv2.imshow('image',im)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    [Error message]
     
-    """
-    """
+    ResourceExhaustedError (see above for traceback): OOM when allocating tensor with shape[307328,3817] and type float on /job:localhost/replica:0/task:0/device:CPU:0 by allocator cpu
+	 [[node training/Adam/Variable_4/Assign (defined at D:\workspace\CHN_OCR\venv\lib\site-packages\keras\backend\tensorflow_backend.py:402)  = Assign[T=DT_FLOAT, _grappler_relax_allocator_constraints=true, use_locking=true, validate_shape=true, _device="/job:localhost/replica:0/task:0/device:CPU:0"](training/Adam/Variable_4, training/Adam/zeros_10)]]
+Hint: If you want to see a list of allocated tensors when OOM happens, add report_tensor_allocations_upon_oom to RunOptions for current allocation info.
+    
+    
     #DEV CODES
     # RUN import
     # config constants

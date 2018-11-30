@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="66c80fdd-9dbd-4e44-86b9-2b359516554a" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/OCR1char/OCR1charTrainer.py" beforeDir="false" afterPath="$PROJECT_DIR$/OCR1char/OCR1charTrainer.py" afterDir="false" />
     </list>
@@ -35,10 +34,13 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/OCR1char/OCR1charTrainer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="280">
-              <caret line="140" column="46" lean-forward="true" selection-start-line="140" selection-start-column="46" selection-end-line="140" selection-end-column="46" />
+            <state relative-caret-position="-6">
+              <caret line="135" lean-forward="true" selection-start-line="135" selection-end-line="135" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
+                <element signature="e#853#1799#1" />
+                <element signature="e#1965#2952#1" />
+                <element signature="e#3763#3952#1" />
                 <element signature="e#4753#5587#0" />
               </folding>
             </state>
@@ -211,7 +213,7 @@
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" sideWeight="0.4997367" weight="0.32972974" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.5460769" visible="true" weight="0.35313174" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.5460769" weight="0.23326133" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -219,7 +221,7 @@
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.32972974" />
       <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.5650342" weight="0.32937366" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.41495523" side_tool="true" weight="0.33585313" />
-      <window_info anchor="bottom" id="Python Console" order="10" sideWeight="0.58504474" weight="0.28077754" />
+      <window_info active="true" anchor="bottom" id="Python Console" order="10" sideWeight="0.58504474" visible="true" weight="0.28077754" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -270,10 +272,13 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/OCR1char/OCR1charTrainer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="280">
-          <caret line="140" column="46" lean-forward="true" selection-start-line="140" selection-start-column="46" selection-end-line="140" selection-end-column="46" />
+        <state relative-caret-position="-6">
+          <caret line="135" lean-forward="true" selection-start-line="135" selection-end-line="135" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
+            <element signature="e#853#1799#1" />
+            <element signature="e#1965#2952#1" />
+            <element signature="e#3763#3952#1" />
             <element signature="e#4753#5587#0" />
           </folding>
         </state>
