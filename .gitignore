@@ -1,5 +1,7 @@
+venv/
 
 data_synthesis/data/
-venv/
+data_synthesis/emoji_fonts/
+
 temp.py
 NotesOfModels.py
