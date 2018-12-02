@@ -1,7 +1,6 @@
 import os
 import copy
 import pickle
-import argparse
 import cv2
 import random
 import time
@@ -9,9 +8,8 @@ import time
 from PIL import Image, ImageDraw, ImageFont
 import numpy as np
 
-# Set ROOT_DIR to "data_synthesis/" when run in PyCharm's Console, Set to "" otherwise
-ROOT_DIR = "data_synthesis/"
-ROOT_DIR = ""
+ROOT_DIR = "data_synthesis/"  # run in PyCharm's Console
+ROOT_DIR = ""   # run main()
 FONT_DIR = 'fonts/'
 OUTPUT_DIR = 'data/'
 
@@ -101,7 +99,7 @@ class PreprocessResizeKeepRatioFillBG(object):
         return False
 
     @classmethod
-    def put_img_into_center(cls, img_large, img_small, ):
+    def put_img_into_center(cls, img_large, img_small):
         width_large = img_large.shape[1]
         height_large = img_large.shape[0]
 
@@ -175,52 +173,6 @@ class PreprocessResizeKeepRatioFillBG(object):
             ret_img = self.put_img_into_center(norm_img, ret_img)
         return ret_img
 
-
-def args_parse():
-    """
-    Command line:
-    python gen_printed_char.py --out_dir ./dataset --font_dir ./chinese_fonts --width 30 --height 30 --margin 4 --rotate 30 --rotate_step 1
-    --out_dir: output directory
-    --font_dir: font file
-    --width, --height, --margin: output size and margin
-    --rotate: rotate from -$rotate to +$rotate, by $rotate_step
-    """
-    parser = argparse.ArgumentParser(
-        description="CHN OCR DATA SYNTHESIS", formatter_class=argparse.RawTextHelpFormatter)
-    parser.add_argument('--out_dir', dest='out_dir',
-                        default=None, required=True,
-                        help='write a caffe dir')
-    parser.add_argument('--font_dir', dest='font_dir',
-                        default=None, required=True,
-                        help='font dir to to produce images')
-    parser.add_argument('--test_ratio', dest='test_ratio',
-                        default=0.2, required=False,
-                        help='test dataset size')
-    parser.add_argument('--width', dest='width',
-                        default=None, required=True,
-                        help='width')
-    parser.add_argument('--height', dest='height',
-                        default=None, required=True,
-                        help='height')
-    parser.add_argument('--no_crop', dest='no_crop',
-                        default=True, required=False,
-                        help='', action='store_true')
-    parser.add_argument('--margin', dest='margin',
-                        default=0, required=False,
-                        help='', )
-    parser.add_argument('--rotate', dest='rotate',
-                        default=0, required=False,
-                        help='max rotate degree 0-45')
-    parser.add_argument('--rotate_step', dest='rotate_step',
-                        default=0, required=False,
-                        help='rotate step for the rotate angle')
-    parser.add_argument('--need_aug', dest='need_aug',
-                        default=False, required=False,
-                        help='need data augmentation', action='store_true')
-    args = vars(parser.parse_args())
-    return args
-
-
 class Augmentor(object):
     def __init__(self):
         pass
@@ -232,23 +184,32 @@ class Augmentor(object):
             img[temp_x][temp_y] = 255 - img[temp_x][temp_y]
         return img
 
-    def add_erode(self, img, kernel_size=3):
+    def add_erode(self, img, kernel_size=2):
         kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (kernel_size, kernel_size))
         return cv2.erode(img, kernel)
 
-    def add_dilate(self, img, kernel_size=3):
+    def add_dilate(self, img, kernel_size=2):
         kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (kernel_size, kernel_size))
         return cv2.dilate(img, kernel)
 
 
 class DataGenerator(object):
-    def __init__(self):
-        pass
+    def __init__(self, width, height, margin, output_dir=ROOT_DIR+OUTPUT_DIR):
+        self.width = width
+        self.height = height
+        self.margin = margin
+        self.output_dir = output_dir
 
-    def map_id_char(self, char_file_path, map_backup_name=""):
+    # Create a mapping from index to each char. in char_file
+    def map_id_char(self, char_file, map_backup_name=""):
+        """
+        :param char_file: .txt file containing all chinese char. for mapping
+        :param map_backup_name: a file name for pickling.
+        :return: mapping from index to each char
+        """
         # read all chars in GB2312 txt file into memory
         all_char = ""
-        with open(file=char_file_path, mode='r', encoding='utf-8') as f:
+        with open(file=char_file, mode='r', encoding='utf-8') as f:
             for line in f:
                 all_char += line
 
@@ -261,36 +222,24 @@ class DataGenerator(object):
 
         # create dictionary dict[id]=char
         mapping_idx_to_char = {}
-        # mapping_char_to_idx = {}
         for idx in range(len(all_char)):
             key = str(idx + 1).zfill(4)
-            val = all_char[idx]  # .encode('utf-8')
+            val = all_char[idx]
             mapping_idx_to_char[key] = val
-            # mapping_char_to_idx[val] = key
         if map_backup_name:
             with open(map_backup_name + ".pkl", 'wb') as f:
                 pickle.dump(mapping_idx_to_char, f)
 
-        """
-        # retrieve mappings
-            with open(DATA_DIR + "mapping_idx_to_char.pkl", 'rb') as f:
-            tmp = pickle.load(f)
-
-        # reverse dictionary
-            pickle_map_char_to_idx =  "mapping_char_to_idx.pkl" 
-            with open(char_path, 'wb') as f:
-                pickle.dump(mapping_char_to_idx, f)
-        """
-        # output the name of stored pickles
         return mapping_idx_to_char
 
+    # generate a list of numpy arrays for each (index, char) using font
+    # also apply img. augmentation: rotate, noise, erode, dilate
     def char2img(self, idx, char, font):
         image_list = []
         # generate plain image
-        # black background
-        img = Image.new("RGB", (WIDTH, HEIGHT), "black")
+        img = Image.new("RGB", (self.width, self.height), "black") # black background
         draw = ImageDraw.Draw(img)
-        font = ImageFont.truetype(font, int(WIDTH * 0.7), )
+        font = ImageFont.truetype(font, int(self.width * 0.7), )
         # white char.
         draw.text((0, 0), char, (255, 255, 255), font=font)
         image_list.append(copy.deepcopy(img))
@@ -313,98 +262,81 @@ class DataGenerator(object):
             if sum_val > 2:
                 np_img = np.asarray(img_data, dtype='uint8')
                 np_img = np_img[:, 0]
-                np_img = np_img.reshape((HEIGHT, WIDTH))
+                np_img = np_img.reshape((self.height, self.width))
                 # crop empty margins
-
                 cropped_box = proc.find_image_bbox(np_img)
                 left, upper, right, lower = cropped_box
                 np_img = np_img[upper: lower + 1, left: right + 1]
                 # Resize, keep ratio, fill background
-                resizer = PreprocessResizeKeepRatioFillBG(WIDTH, HEIGHT, fill_bg=False, margin=MARGIN)
+                resizer = PreprocessResizeKeepRatioFillBG(self.width, self.height,
+                                                          fill_bg=False,
+                                                          margin=self.margin)
                 np_img = resizer.do(np_img)
-
                 np_img_list.append(np_img)
             else:
-                print("no numpy-image found. ", idx)
+                print("no numpy-image found. ", idx, char)
 
         if not np_img_list:
             return []
 
         #   Augment image:
         aug = Augmentor()
+        #   pepper-salt noise, erosion, dilation
         noised, eroded, dilated = [], [], []
         for each in copy.deepcopy(np_img_list):
-            #   pepper-salt noise
-            img_aug = aug.add_noise(each)
-            noised.append(img_aug)
-
+            augmented = aug.add_noise(each)
+            noised.append(augmented)
         for each in copy.deepcopy(np_img_list):
-            #   image erosion
-            img_aug = aug.add_erode(each)
-            eroded.append(img_aug)
-
+            augmented = aug.add_erode(each)
+            eroded.append(augmented)
         for each in copy.deepcopy(np_img_list):
-            #   image dilation
-            img_aug = aug.add_dilate(each)
-            dilated.append(img_aug)
+            augmented = aug.add_dilate(each)
+            dilated.append(augmented)
 
-        # cv2.namedWindow('image', cv2.WINDOW_NORMAL)
-        # cv2.imshow('image', np_img)
-        # cv2.waitKey(0)
-        # cv2.destroyAllWindows()
         return np_img_list + noised + eroded + dilated
 
-    def split_test_train_write(self, data, idx, font_name,
+    def split_test_train_write(self, image_list, idx, font_name,
                                train=70, validate=20, test=10,
                                random_seed=670):
         # create folder names
-        train_dir = ROOT_DIR + OUTPUT_DIR + 'train/' + idx
-        validate_dir = ROOT_DIR + OUTPUT_DIR + 'validate/' + idx
-        test_dir = ROOT_DIR + OUTPUT_DIR + 'test/' + idx
+        train_dir = self.output_dir + 'train/' + idx
+        validate_dir = self.output_dir + 'validate/' + idx
+        test_dir = self.output_dir + 'test/' + idx
+        # check / create folder
+        if not os.path.exists(train_dir):
+            os.makedirs(train_dir)
+        if not os.path.exists(validate_dir):
+            os.makedirs(validate_dir)
+        if not os.path.exists(test_dir):
+            os.makedirs(test_dir)
 
-        size = len(data)
+        # shuffle for random output
+        size = len(image_list)
         indices = [i for i in range(size)]
         random.seed(random_seed)
         random.shuffle(indices)
 
-        train_count = train / (train+validate+test) * size
-        validate_count = validate / (train+validate+test) * size
-        split = [[],[],[]]
+        train_upperbound = train / (train+validate+test) * size
+        validate_upperbound = validate / (train+validate+test) * size + train_upperbound
         count = 0
         while indices:
             i = indices.pop()
-            if count < train_count:
-                split[0].append(i)
-            elif train_count <= count < (train_count+validate_count):
-                split[1].append(i)
+            if count < train_upperbound:
+                cv2.imwrite(train_dir + "/" + font_name + str(i) + ".png", image_list[i])
+            elif train_upperbound <= count < validate_upperbound:
+                cv2.imwrite(validate_dir + "/" + font_name + str(i) + ".png", image_list[i])
             else:
-                split[2].append(i)
+                cv2.imwrite(test_dir + "/" + font_name + str(i) + ".png", image_list[i])
             count += 1
 
-
-        if not os.path.exists(train_dir):
-            os.makedirs(train_dir)
-        for i in split[0]:
-            cv2.imwrite(train_dir + "/" + font_name + str(i) + ".png", data[i])
-
-        if not os.path.exists(validate_dir):
-            os.makedirs(validate_dir)
-        for i in split[1]:
-            cv2.imwrite(validate_dir + "/" + font_name + str(i) + ".png", data[i])
-
-        if not os.path.exists(test_dir):
-            os.makedirs(test_dir)
-        for i in split[2]:
-            cv2.imwrite(test_dir + "/" + font_name + str(i) + ".png", data[i])
-
+    # load map_idx2char and call char2img() then write generated file to disk
     def gen_img(self, fonts, map_idx2char, max_iter=-1):
         if max_iter<0:
             max_iter = len(map_idx2char)
 
-        iteration = 0
+        iteration = 0  # = number of chars to gen. image
         for idx, char in map_idx2char.items():
             print(idx, char)
-            image_list = []
             for font in fonts:
                 image_list = self.char2img(idx, char, font)
                 self.split_test_train_write(image_list, idx,
@@ -415,18 +347,25 @@ class DataGenerator(object):
                 break
 
 if __name__ == '__main__':
-    # Generating Chinese character
+    # Generating Chinese character + alpha&numeric in full-width
     tick = time.time()
 
-    gen = DataGenerator()
-    map_idx_to_char = gen.map_id_char(ROOT_DIR + GB2312_FILE, "mapping_idx_to_char")
+    gen = DataGenerator(width=60,
+                        height=60,
+                        margin=4,
+                        output_dir="data/")
+    # map_idx_to_char = gen.map_id_char(ROOT_DIR + GB2312_FILE, "mapping_idx_to_char")
+    with open("mapping_idx_to_char.pkl", 'rb') as f:
+        map_idx_to_char = pickle.load(f)
+
     # 微软雅黑 /  黑体 / 仿宋 / 楷体 / 宋体
     fonts = ["msyh.ttc", "simhei.ttf", "simfang.ttf", "simkai.ttf", "simsun.ttc"]
     gen.gen_img(fonts, map_idx_to_char, max_iter=-1)
 
     print(time.time()-tick)
 
-    # # TESTING
-    # font = FONT0
-    # idx = '0001'
-    # char = map_idx_to_char[idx]
+    # cv2 display image code:
+    # cv2.namedWindow('image', cv2.WINDOW_NORMAL)
+    # cv2.imshow('image', np_img)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
