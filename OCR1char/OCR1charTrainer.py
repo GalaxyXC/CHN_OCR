@@ -108,7 +108,7 @@ class OCR1charTrainer(object):
         tik = time.time()
         model.fit_generator(train_gen,
                             steps_per_epoch=len(X_train) // BATCH_SIZE,
-                            epochs=EPOCHS)
+                            epochs=epochs)
         print("Model fitting total time: ", time.time() - tik)
         return model, class_dict
 
@@ -186,6 +186,11 @@ if __name__ == '__main__':
     model1 = tn.model1_setup() # simple NN
 
     trained, class_dict = tn.train(model1, epochs=20)
+    rev_class_dict = {}
+    for k,v in class_dict.items():
+        rev_class_dict[v] = k
+
+
 
     """    
     #DEV CODES
@@ -193,22 +198,35 @@ if __name__ == '__main__':
     # config constants
     # run pickle.load(training_files)
     """
-    with open(ROOT_DIR+"experiment/validate1_labels.txt", 'r') as f:
-        y_validate = f.read().split(", ")
-    n = len(y_validate)
+    experiment_dir = ROOT_DIR + "data_synthesis/experiment/"
 
-    X_filenames = os.listdir(ROOT_DIR + "experiment/validate1/")
-    for i in range(n):
-        i = 1
-        x_filename = ROOT_DIR + "experiment/validate1/" + X_filenames[i]
+    with open("mapping_idx_to_char.pkl", 'rb') as f:
+        mapping = pickle.load(f)
+
+    X_filenames = os.listdir(experiment_dir + "/validate1/")
+    i = 0
+    while True:
+        q = input("\n Hit ENTER for next validate/test case >>> \n Hit 'q' to quit. \n ")
+        if q ==  'q':
+            break
+        try:
+            x_filename = experiment_dir + "/validate1/" + X_filenames[i]
+        except:
+            print("no more samples.")
+            break
+
         x_data = cv2.imread(x_filename, 0) # read as grayscale
         x_data = tf.reshape(x_data, (1,60,60,1))
 
-        y_truth = y_validate[i]
-        y_pred_onehot_encode = trained.predict(x_data, steps=1).tolist()[0]
-        y_pred = class_dict[y_pred_onehot_encode.index(1.0)]
+        y_pred_encode = trained.predict(x_data, steps=1).tolist()[0]
+        index_encode = np.argsort(y_pred_encode)[-5:][::-1]
+        y_pred_idx = [rev_class_dict[i] for i in index_encode]
+        y_pred_char = [mapping[i] for i in y_pred_idx]
 
-        print("truth: ", y_truth, " prediction: ", y_pred)
-
+        print("filename: ", X_filenames[i])
+        print("5-largest pred. in char: ", y_pred_char)
+        print("5-largest pred. in idx: ", y_pred_idx)
+        print("5-largest pred.: ", index_encode)
+        i += 1
 
 

@@ -128,7 +128,7 @@ class Utils(object):
 if __name__ == '__main__':
     u = Utils()
     # u.createExperimentEnv(ROOT_DIR+DATA_DIR, ROOT_DIR+EXP_DIR)
-    ll = u.generate_random_validation_set(ROOT_DIR+EXP_DIR+"validate/", ROOT_DIR+EXP_DIR+"validate1/", 2)
+    ll = u.generate_random_validation_set(ROOT_DIR+EXP_DIR+"validate/", ROOT_DIR+EXP_DIR+"validate1/", 8)
     print(ll)
     with open(ROOT_DIR+EXP_DIR+"validate1_labels.txt", 'w') as f:
         f.write(", ".join(ll))

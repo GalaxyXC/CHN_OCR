@@ -2,8 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="66c80fdd-9dbd-4e44-86b9-2b359516554a" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Notes.py" beforeDir="false" afterPath="$PROJECT_DIR$/Notes.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/OCR1char/OCR1charTrainer.py" beforeDir="false" afterPath="$PROJECT_DIR$/OCR1char/OCR1charTrainer.py" afterDir="false" />
     </list>
@@ -18,11 +16,10 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Notes.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="449">
-              <caret line="133" column="30" lean-forward="true" selection-start-line="133" selection-start-column="30" selection-end-line="133" selection-end-column="30" />
+            <state relative-caret-position="-765">
+              <caret line="39" selection-start-line="39" selection-end-line="39" selection-end-column="55" />
               <folding>
                 <element signature="e#0#17#0" expanded="true" />
-                <element signature="e#1016#1024#0" />
                 <element signature="e#1168#1475#0" />
               </folding>
             </state>
@@ -32,8 +29,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/OCR1char/OCR1charTrainer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-221">
-              <caret line="107" column="25" selection-start-line="107" selection-start-column="25" selection-end-line="107" selection-end-column="25" />
+            <state relative-caret-position="151">
+              <caret line="206" selection-start-line="206" selection-end-line="229" selection-end-column="14" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
                 <element signature="e#842#1788#1" />
@@ -43,6 +40,19 @@
                 <element signature="e#5384#6218#0" />
                 <element signature="e#6256#6747#0" />
                 <element signature="e#6909#7885#1" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/data_synthesis/DataSynthesis.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="271">
+              <caret line="227" selection-start-line="227" selection-end-line="228" selection-end-column="51" />
+              <folding>
+                <element signature="e#0#9#0" expanded="true" />
+                <marker date="1543769573229" expanded="true" signature="7804:7813" ph="..." />
               </folding>
             </state>
           </provider>
@@ -126,13 +136,6 @@
               <item name="CHN_OCR" type="462c0819:PsiDirectoryNode" />
               <item name="data_synthesis" type="462c0819:PsiDirectoryNode" />
               <item name="experiment" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="CHN_OCR" type="b2602c69:ProjectViewProjectNode" />
-              <item name="CHN_OCR" type="462c0819:PsiDirectoryNode" />
-              <item name="data_synthesis" type="462c0819:PsiDirectoryNode" />
-              <item name="experiment" type="462c0819:PsiDirectoryNode" />
-              <item name="validate1" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="CHN_OCR" type="b2602c69:ProjectViewProjectNode" />
@@ -307,7 +310,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.14376996" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -322,7 +324,7 @@
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.32937366" />
       <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.5650342" weight="0.32937366" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.41495523" side_tool="true" weight="0.33585313" />
-      <window_info active="true" anchor="bottom" id="Python Console" order="10" sideWeight="0.58504474" visible="true" weight="0.26673865" />
+      <window_info active="true" anchor="bottom" id="Python Console" order="10" sideWeight="0.58504474" visible="true" weight="0.37149027" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.24973376" />
@@ -376,10 +378,21 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Notes.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-765">
+          <caret line="39" selection-start-line="39" selection-end-line="39" selection-end-column="55" />
+          <folding>
+            <element signature="e#0#17#0" expanded="true" />
+            <element signature="e#1168#1475#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/data_synthesis/DataSynthesis.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="203">
-          <caret line="310" column="17" selection-start-line="310" selection-start-column="10" selection-end-line="310" selection-end-column="17" />
+        <state relative-caret-position="271">
+          <caret line="227" selection-start-line="227" selection-end-line="228" selection-end-column="51" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
             <marker date="1543769573229" expanded="true" signature="7804:7813" ph="..." />
@@ -387,22 +400,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Notes.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="449">
-          <caret line="133" column="30" lean-forward="true" selection-start-line="133" selection-start-column="30" selection-end-line="133" selection-end-column="30" />
-          <folding>
-            <element signature="e#0#17#0" expanded="true" />
-            <element signature="e#1016#1024#0" />
-            <element signature="e#1168#1475#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/OCR1char/OCR1charTrainer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-221">
-          <caret line="107" column="25" selection-start-line="107" selection-start-column="25" selection-end-line="107" selection-end-column="25" />
+        <state relative-caret-position="151">
+          <caret line="206" selection-start-line="206" selection-end-line="229" selection-end-column="14" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
             <element signature="e#842#1788#1" />
