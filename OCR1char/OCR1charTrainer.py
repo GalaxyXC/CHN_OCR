@@ -3,18 +3,19 @@ import time
 import pickle
 
 import numpy as np
+import cv2
 import tensorflow as tf
 from keras import backend as K
 from keras import Sequential
-from keras.layers import Dense, Dropout, Activation, Conv2D, Flatten, MaxPool2D, Reshape
+from keras.layers import Dense, Dropout, Conv2D, Flatten, MaxPool2D, Reshape
 from keras.preprocessing import image
-from keras.optimizers import Adam
 
-ROOT_DIR = "D:/workspace/CHN_OCR/data_synthesis/"
-DATA_DIR = "data/"
+ROOT_DIR = "D:/workspace/CHN_OCR/"
+DATA_DIR = "data_synthesis/experiment/"
+MODEL_DIR = "OCR1char/"
+
 TRAIN_DIR = ROOT_DIR + DATA_DIR + "train/"
 VALIDATE_DIR = ROOT_DIR + DATA_DIR + "validate/"
-MODEL_DIR = "OCR1char/"
 
 EPOCHS = 5
 BATCH_SIZE = 32
@@ -56,7 +57,7 @@ class OCR1charTrainer(object):
             pickle.dump([X_train, y_train], f)
         """
         # Import training file names
-        with open("training_file_names.pkl", 'rb') as f:
+        with open(MODEL_DIR + "training_file_names.pkl", 'rb') as f:
             X_train, y_train = pickle.load(f)
 
         # Generate Validating file names
@@ -83,32 +84,35 @@ class OCR1charTrainer(object):
             pickle.dump([X_validate, y_validate], f)
         """
         # Import validating file names
-        with open("validating_file_names.pkl", 'rb') as f:
+        with open(MODEL_DIR + "validating_file_names.pkl", 'rb') as f:
             X_validate, y_validate = pickle.load(f)
 
         # use Keras.preprocessing.image.ImageDataGenerator()
         train_datagen = image.ImageDataGenerator()
         tik = time.time()
         train_gen = train_datagen.flow_from_directory(TRAIN_DIR,
-                                                      target_size=(100, 100),
+                                                      target_size=(60, 60),
                                                       color_mode='grayscale',
                                                       seed=RANDOM_SEED,
                                                       batch_size=BATCH_SIZE,
                                                       class_mode='sparse')
+        class_dict = train_gen.class_indices
+
         print("Deploy data generator: ", time.time() - tik)
 
         model = keras_model
         # one-hot encoded: use 'categorical_crossentropy' as loss, otherwise use 'sparse...'
         model.compile(loss='sparse_categorical_crossentropy',
                       optimizer='adam')
-        tik = time.time()
 
+        tik = time.time()
         model.fit_generator(train_gen,
                             steps_per_epoch=len(X_train) // BATCH_SIZE,
                             epochs=EPOCHS)
         print("Model fitting total time: ", time.time() - tik)
+        return model, class_dict
 
-
+    # Deprecated
     def tfdata_generator(self, images, labels,
                          train=True,
                          batch_size=BATCH_SIZE):
@@ -166,24 +170,22 @@ class OCR1charTrainer(object):
     def model1_setup(self):
         # Simple NN
         model = Sequential()
-        model.add(Conv2D(16, kernel_size=(3, 3), activation='relu', input_shape=(100, 100, 1)))
+        model.add(Conv2D(16, kernel_size=(3, 3), activation='relu', input_shape=(60, 60, 1)))
         model.add(MaxPool2D(pool_size=(2, 2)))
         #model.add(Conv2D(64, kernel_size=(3, 3), activation='relu'))
         #model.add(MaxPool2D(pool_size=(2, 2)))
         model.add(Flatten())
         model.add(Dense(32, activation='relu'))
-        #model.add(Dropout(0.1))
-        #model.add(Reshape((NUM_CLASSES,-1)))
+        model.add(Dropout(0.1))
         model.add(Dense(NUM_CLASSES, activation='softmax'))
         return model
+
 
 if __name__ == '__main__':
     tn = OCR1charTrainer()
     model1 = tn.model1_setup() # simple NN
 
-    print("model set.")
-    tn.train(model1, epochs=5)
-
+    trained, class_dict = tn.train(model1, epochs=20)
 
     """    
     #DEV CODES
@@ -191,4 +193,22 @@ if __name__ == '__main__':
     # config constants
     # run pickle.load(training_files)
     """
+    with open(ROOT_DIR+"experiment/validate1_labels.txt", 'r') as f:
+        y_validate = f.read().split(", ")
+    n = len(y_validate)
+
+    X_filenames = os.listdir(ROOT_DIR + "experiment/validate1/")
+    for i in range(n):
+        i = 1
+        x_filename = ROOT_DIR + "experiment/validate1/" + X_filenames[i]
+        x_data = cv2.imread(x_filename, 0) # read as grayscale
+        x_data = tf.reshape(x_data, (1,60,60,1))
+
+        y_truth = y_validate[i]
+        y_pred_onehot_encode = trained.predict(x_data, steps=1).tolist()[0]
+        y_pred = class_dict[y_pred_onehot_encode.index(1.0)]
+
+        print("truth: ", y_truth, " prediction: ", y_pred)
+
+
 

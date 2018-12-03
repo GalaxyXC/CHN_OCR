@@ -5,5 +5,6 @@ data_synthesis/emoji/
 data_synthesis/deprecated/
 data_synthesis/experiment/
 data_synthesis/__pycache__/
+
 temp.py
-NotesOfModels.py
+Notes.py
