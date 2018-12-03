@@ -1,7 +1,7 @@
 venv/
 
 data_synthesis/data/
-data_synthesis/emoji_fonts/
+data_synthesis/emoji/
 data_synthesis/deprecated/
 data_synthesis/experiment/
 data_synthesis/__pycache__/

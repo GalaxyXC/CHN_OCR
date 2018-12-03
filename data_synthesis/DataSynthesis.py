@@ -20,8 +20,6 @@ HEIGHT = 100
 WIDTH = 100
 MARGIN = 4
 
-TRAIN_VALIDATE_TEST_RATIO = [70,20,10]
-
 class Processor(object):
     def __init__(self, ):
         pass
